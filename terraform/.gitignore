@@ -1,0 +1,4 @@
+# Ignore local Terraform state
+*.tfstate
+*.tfstate.*
+.terraform/
