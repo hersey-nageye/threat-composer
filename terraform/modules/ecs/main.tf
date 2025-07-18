@@ -1,5 +1,8 @@
 # ECS
 
+data "aws_region" "current" {}
+
+
 resource "aws_security_group" "ecs_tasks_sg" {
   name        = var.ecs_sg_name
   description = "Security group for ECS tasks"

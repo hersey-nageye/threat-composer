@@ -15,3 +15,21 @@ output "target_group_arn" {
 
 }
 
+output "alb_listener_web" {
+  description = "Listener for the Application Load Balancer on port 80"
+  value       = aws_lb_listener.web.id
+
+}
+
+output "alb_dns_name" {
+  description = "DNS name of the Application Load Balancer"
+  value       = aws_lb.alb.dns_name
+
+}
+
+output "alb_zone_id" {
+  description = "Zone ID of the Application Load Balancer"
+  value       = aws_lb.alb.zone_id
+
+}
+

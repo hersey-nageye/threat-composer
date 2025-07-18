@@ -2,7 +2,7 @@
 # ACM
 
 resource "aws_acm_certificate" "main_certificate" {
-  domain_name       = var.domain_name
+  domain_name       = var.domain_with_subdomain
   validation_method = "DNS"
 
   subject_alternative_names = [
@@ -28,7 +28,7 @@ resource "aws_acm_certificate_validation" "main_validation" {
 # Route53
 
 resource "aws_route53_zone" "main" {
-  name = var.domain_name
+  name = var.domain_with_subdomain
 
   tags = merge(var.common_tags, {
     Name = "${var.project_name}-main-hosted-zone"
@@ -37,7 +37,7 @@ resource "aws_route53_zone" "main" {
 
 resource "aws_route53_record" "cert_validation" {
   for_each = {
-    for dvo in aws_acm_certificate.main.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.main_certificate.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -52,15 +52,15 @@ resource "aws_route53_record" "cert_validation" {
   zone_id         = aws_route53_zone.main.zone_id
 }
 
-resource "aws_route53_record" "app" {
-  zone_id = aws_route53_zone.main.zone_id
-  name    = var.domain_with_subdomain
-  type    = "A"
+# resource "aws_route53_record" "app" {
+#   zone_id = aws_route53_zone.main.zone_id
+#   name    = var.domain_with_subdomain
+#   type    = "A"
 
-  alias {
-    name                   = var.alb_dns_name
-    zone_id                = var.alb_zone_id
-    evaluate_target_health = true
-  }
-}
+#   alias {
+#     name                   = var.alb_dns_name
+#     zone_id                = var.alb_zone_id
+#     evaluate_target_health = true
+#   }
+# }
 

@@ -1,10 +1,10 @@
-output "main_certificate_arn" {
-  value       = aws_acm_certificate.main_certificate.arn
+output "certificate_arn" {
+  value       = aws_acm_certificate_validation.main_validation.certificate_arn
   description = "The ARN of the main ACM certificate."
 
 }
 
-output "main_certificate_validation" {
+output "certificate_validation" {
   value       = aws_acm_certificate_validation.main_validation
   description = "The ACM certificate validation resource."
 
@@ -22,7 +22,7 @@ output "domain_validation_options" {
 
 }
 
-output "main_zone_id" {
+output "hosted_zone_id" {
   value       = aws_route53_zone.main.zone_id
   description = "The ID of the main Route53 hosted zone."
 
@@ -30,5 +30,5 @@ output "main_zone_id" {
 
 output "hosted_zone_name_servers" {
   description = "Route53 hosted zone name servers"
-  value       = aws_route53_hosted_zone.main.name_servers
+  value       = aws_route53_zone.main.name_servers
 }
