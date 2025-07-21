@@ -1,6 +1,8 @@
 
-# ACM
+# ACM and Route53 Setup - This module provisions an ACM certificate for a domain with subdomain and sets up a Route53 hosted zone for DNS validation.
 
+
+# ACM Certificate for the subdomain
 resource "aws_acm_certificate" "main_certificate" {
   domain_name       = var.domain_with_subdomain
   validation_method = "DNS"
@@ -18,6 +20,8 @@ resource "aws_acm_certificate" "main_certificate" {
   })
 }
 
+
+# DNS Validation for the ACM Certificate
 resource "aws_acm_certificate_validation" "main_validation" {
   certificate_arn         = aws_acm_certificate.main_certificate.arn
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
@@ -25,8 +29,8 @@ resource "aws_acm_certificate_validation" "main_validation" {
   depends_on = [aws_route53_record.cert_validation]
 }
 
-# Route53
 
+# Route53 Hosted Zone for the subdomain
 resource "aws_route53_zone" "main" {
   name = var.domain_with_subdomain
 
@@ -35,6 +39,7 @@ resource "aws_route53_zone" "main" {
   })
 }
 
+# Route53 Record for DNS validation of the ACM Certificate
 resource "aws_route53_record" "cert_validation" {
   for_each = {
     for dvo in aws_acm_certificate.main_certificate.domain_validation_options : dvo.domain_name => {
@@ -51,16 +56,3 @@ resource "aws_route53_record" "cert_validation" {
   type            = each.value.type
   zone_id         = aws_route53_zone.main.zone_id
 }
-
-# resource "aws_route53_record" "app" {
-#   zone_id = aws_route53_zone.main.zone_id
-#   name    = var.domain_with_subdomain
-#   type    = "A"
-
-#   alias {
-#     name                   = var.alb_dns_name
-#     zone_id                = var.alb_zone_id
-#     evaluate_target_health = true
-#   }
-# }
-

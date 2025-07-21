@@ -61,7 +61,6 @@ module "ecs" {
 module "certificate" {
   source = "./modules/certificate"
 
-  domain_name           = var.domain_name
   domain_with_subdomain = var.domain_with_subdomain
   common_tags           = var.common_tags
   project_name          = var.project_name

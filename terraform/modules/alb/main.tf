@@ -1,3 +1,7 @@
+# ALB - This module creates an Application Load Balancer (ALB) with security groups and target groups.
+
+
+# AWS Security Group for ALB with ingress and egress rules
 resource "aws_security_group" "alb_sg" {
   name        = var.alb_sg_name
   description = "Security group for Application Load Balancer"
@@ -37,6 +41,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4_alb" {
   ip_protocol       = "-1"
 }
 
+# Create the Application Load Balancer and its target group
 resource "aws_lb" "alb" {
   name               = var.alb_name
   internal           = false
@@ -75,6 +80,7 @@ resource "aws_lb_target_group" "app" {
   })
 }
 
+# Create ALB listeners for HTTP and HTTPS traffic
 resource "aws_lb_listener" "web" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "80"

@@ -1,8 +1,9 @@
-# ECS
+# ECS - This module sets up an ECS cluster, task definition, and service with a security group for tasks.
 
+# Data source to get the current AWS region
 data "aws_region" "current" {}
 
-
+# Security group for ECS tasks with ingress and egress rules
 resource "aws_security_group" "ecs_tasks_sg" {
   name        = var.ecs_sg_name
   description = "Security group for ECS tasks"
@@ -27,6 +28,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4_ecs" {
   ip_protocol       = "-1"
 }
 
+# ECS Cluster for running tasks
 resource "aws_ecs_cluster" "my-cluster" {
   name = var.ecs_cluster_name
 
@@ -35,6 +37,7 @@ resource "aws_ecs_cluster" "my-cluster" {
   })
 }
 
+# CloudWatch Log Group for ECS task logs
 resource "aws_cloudwatch_log_group" "ecs_logs" {
   name              = "/ecs/${var.task_family_name}"
   retention_in_days = 7
@@ -44,6 +47,7 @@ resource "aws_cloudwatch_log_group" "ecs_logs" {
   })
 }
 
+# ECS Task Definition for defining the task's properties
 resource "aws_ecs_task_definition" "my-task" {
   family                   = var.task_family_name
   network_mode             = "awsvpc"
@@ -76,6 +80,7 @@ resource "aws_ecs_task_definition" "my-task" {
   ])
 }
 
+# ECS Service to run the task definition
 resource "aws_ecs_service" "main" {
   name            = var.service_name
   cluster         = aws_ecs_cluster.my-cluster.id

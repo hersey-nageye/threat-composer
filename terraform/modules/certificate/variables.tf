@@ -1,9 +1,3 @@
-variable "domain_name" {
-  description = "The primary domain name for the ACM certificate."
-  type        = string
-
-}
-
 variable "domain_with_subdomain" {
   description = "The domain name with subdomain for the Route53 record."
   type        = string

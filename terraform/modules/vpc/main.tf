@@ -1,5 +1,7 @@
-# VPC
+# VPC - This module creates a custom Virtual Private Cloud (VPC) with public subnets, an internet gateway, and route tables.
 
+
+# VPC
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
   tags = merge(var.common_tags, {
@@ -48,6 +50,7 @@ resource "aws_route_table" "public_rt" {
   )
 }
 
+# Route Table Association for Public Subnets
 resource "aws_route_table_association" "public-rta" {
   count          = length(aws_subnet.public)
   subnet_id      = aws_subnet.public[count.index].id
