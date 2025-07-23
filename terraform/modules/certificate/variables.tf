@@ -15,3 +15,9 @@ variable "project_name" {
   type        = string
 
 }
+
+variable "cloudflare_zone_id" {
+  description = "Cloudflare zone ID for drhersey.org"
+  type        = string
+
+}

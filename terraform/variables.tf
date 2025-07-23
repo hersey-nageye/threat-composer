@@ -118,6 +118,18 @@ variable "domain_name" {
 
 }
 
+variable "cloudflare_api_token" {
+  description = "Cloudflare API token"
+  type        = string
+
+}
+
+variable "cloudflare_zone_id" {
+  description = "Cloudflare zone ID for drhersey.org"
+  type        = string
+
+}
+
 variable "domain_with_subdomain" {
   description = "The domain name with subdomain for the Route53 record"
   type        = string

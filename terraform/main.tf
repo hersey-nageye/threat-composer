@@ -60,20 +60,25 @@ module "ecs" {
 
 module "certificate" {
   source = "./modules/certificate"
+  providers = {
+    aws        = aws
+    cloudflare = cloudflare
+  }
 
   domain_with_subdomain = var.domain_with_subdomain
   common_tags           = var.common_tags
   project_name          = var.project_name
-
+  cloudflare_zone_id    = var.cloudflare_zone_id
 }
 
 module "dns" {
   source = "./modules/dns"
 
-  hosted_zone_id        = module.certificate.hosted_zone_id
-  domain_with_subdomain = var.domain_with_subdomain
-  alb_dns_name          = module.alb.alb_dns_name
-  alb_zone_id           = module.alb.alb_zone_id
+  cloudflare_zone_id = var.cloudflare_zone_id
+  alb_dns_name       = module.alb.alb_dns_name
+
+  # Ensure certificate is validated before creating DNS record
+  depends_on = [module.certificate]
 }
 
 
