@@ -10,6 +10,11 @@ env:
   AWS_REGION: eu-west-2  
   ECR_REPOSITORY: ecs-project
 
+permissions:
+    contents: read
+    security-events: write
+    actions: read
+
 jobs:
   build-and-push:
     name: Build, Scan and Push Docker Image
