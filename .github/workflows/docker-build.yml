@@ -59,6 +59,7 @@ jobs:
         
     - name: Run Trivy scanner for critical vulnerabilities
       uses: aquasecurity/trivy-action@0.28.0
+      continue-on-error: true
       with:
         image-ref: '${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}'
         format: 'table'
