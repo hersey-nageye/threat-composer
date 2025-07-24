@@ -2,13 +2,14 @@ name: Terraform Security Scan and Plan
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
     paths: 
       - 'terraform/**' 
   pull_request:
     branches: [ main ]
     paths:
       - 'terraform/**'
+      - '.github/workflows/terraform-*.yml'
 
 env:
   AWS_REGION: eu-west-2  

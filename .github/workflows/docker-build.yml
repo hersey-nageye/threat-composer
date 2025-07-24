@@ -2,9 +2,15 @@ name: Docker Build, Scan and Push to ECR
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
+    paths:
+      - 'app/**'          
+      - '.github/workflows/docker-*.yml'  
   pull_request:
     branches: [ main ]
+    paths:
+      - 'app/**'
+      - '.github/workflows/docker-*.yml'
 
 env:
   AWS_REGION: eu-west-2  
@@ -41,7 +47,7 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -f app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG app/
-        docker build -f app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:latest app/
+        docker build -f app/Dockerfile -t $ECR_REPOSITORY:latest app/
         
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@0.28.0
