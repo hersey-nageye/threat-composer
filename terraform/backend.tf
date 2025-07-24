@@ -1,4 +1,4 @@
-# Remote backend configuration for Terraform state management
+# Remote backend configuration for Terraform state management.
 terraform {
   backend "s3" {
     bucket       = "ecs-project-tfstate-bucket"
