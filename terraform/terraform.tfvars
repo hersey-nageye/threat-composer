@@ -34,7 +34,6 @@ container_port      = 3000
 container_image_url = "816069169238.dkr.ecr.eu-west-2.amazonaws.com/ecs-project:v2"
 
 # Certificate / DNS
-domain_name           = "drhersey.org"
 domain_with_subdomain = "tm.drhersey.org"
 
 
