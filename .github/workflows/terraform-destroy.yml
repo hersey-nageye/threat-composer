@@ -16,12 +16,12 @@ jobs:
   terraform-destroy:
     name: Destroy Terraform Infrastructure
     runs-on: ubuntu-latest
-    environment: production  # This adds a manual approval gate
-    defaults:
-      run:
-        working-directory: terraform
+    environment: production  # Optional: approval gate
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
     - name: Validate confirmation
       run: |
         if [ "${{ inputs.confirm_destroy }}" != "DESTROY" ]; then
@@ -29,9 +29,6 @@ jobs:
           exit 1
         fi
         echo "Confirmation validated"
-
-    - name: Checkout code
-      uses: actions/checkout@v4
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
@@ -51,6 +48,7 @@ jobs:
           -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
           -backend-config="key=${{ secrets.TF_STATE_KEY }}" \
           -backend-config="region=${{ env.AWS_REGION }}"
+      working-directory: terraform
 
     - name: Terraform Destroy
       env:
@@ -59,6 +57,7 @@ jobs:
         echo "Destroying infrastructure..."
         terraform destroy -auto-approve
         echo "Terraform destroy completed successfully!"
+      working-directory: terraform
 
     - name: Destroy Summary
       if: always()
@@ -69,4 +68,3 @@ jobs:
         else
           echo "**Destroy failed!**" >> $GITHUB_STEP_SUMMARY
           echo "- Check logs above for error details." >> $GITHUB_STEP_SUMMARY
-        fi
