@@ -99,3 +99,4 @@ jobs:
         else
           echo "**Apply failed!**" >> $GITHUB_STEP_SUMMARY
           echo "- Check the logs above for error details" >> $GITHUB_STEP_SUMMARY
+        fi

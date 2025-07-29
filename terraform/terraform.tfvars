@@ -38,5 +38,5 @@ domain_with_subdomain = "tm.drhersey.org"
 
 
 
-# Cloudflare 
+# Cloudflare test
 cloudflare_zone_id = "1804c4a001148cf6c658deb8e4b31370"
