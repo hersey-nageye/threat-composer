@@ -68,3 +68,4 @@ jobs:
         else
           echo "**Destroy failed!**" >> $GITHUB_STEP_SUMMARY
           echo "- Check logs above for error details." >> $GITHUB_STEP_SUMMARY
+        fi
