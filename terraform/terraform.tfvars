@@ -7,7 +7,7 @@ common_tags = {
 
 project_name = "ecs-project"
 
-# VPC
+# VPC - Hello!
 
 vpc_cidr                  = "10.0.0.0/16"
 subnet_availability_zones = ["eu-west-2a", "eu-west-2b"]
