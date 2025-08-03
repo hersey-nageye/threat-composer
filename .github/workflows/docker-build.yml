@@ -4,8 +4,8 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'app/**'           # Covers all files in app/ including Dockerfile and .dockerignore
-      - '.github/workflows/docker-*.yml'  # Pipeline changes
+      - 'app/**'           
+      - '.github/workflows/docker-*.yml' 
   pull_request:
     branches: [ main ]
     paths:
