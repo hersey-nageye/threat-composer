@@ -1,22 +1,26 @@
 # ---- Build Stage ----
-FROM node:20-alpine AS builder
+FROM node:23-alpine AS builder
 WORKDIR /app
 
-COPY . .
+# Copy package files first (better cache)
+COPY package*.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-RUN yarn install
+# Copy the rest of the source code
+COPY . .
 RUN yarn build
 
 # ---- Production Stage ----
-FROM node:20-alpine
-WORKDIR /app
+FROM nginx:alpine
 
-COPY --from=builder /app/build ./build
-RUN yarn global add serve
+# Remove default nginx static assets
+RUN rm -rf /usr/share/nginx/html/*
 
-# Create non-root user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
+# Copy build output from builder
+COPY --from=builder /app/build /usr/share/nginx/html
 
-EXPOSE 3000
-CMD ["serve", "-s", "build"]
+# Copy custom nginx config for SPA routing
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

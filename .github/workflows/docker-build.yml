@@ -47,7 +47,8 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -f app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG app/
-        docker build -f app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:latest app/
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
         
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@0.28.0
@@ -63,15 +64,24 @@ jobs:
       with:
         sarif_file: 'trivy-results.sarif'
         
-    - name: Run Trivy scanner for critical vulnerabilities
+    - name: Trivy scan for critical vulnerabilities (gate)
       uses: aquasecurity/trivy-action@0.28.0
-      continue-on-error: true
       with:
         image-ref: '${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}'
+        scanners: 'vuln'
+        ignore-unfixed: true
+        output: 'trivy-gate.txt'
         format: 'table'
         severity: 'CRITICAL,HIGH'
         exit-code: '1'
       timeout-minutes: 10
+
+    - name: Upload Trivy gate output
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: trivy-gate-output
+        path: trivy-gate.txt
         
     - name: Push image to Amazon ECR
       env:
