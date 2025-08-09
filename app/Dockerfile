@@ -1,20 +1,22 @@
 # ---- Build Stage ----
-FROM node:20-alpine AS builder
+FROM node:23-alpine AS builder
 WORKDIR /app
 
-COPY . .
-
+COPY package*.json yarn.lock ./
 RUN yarn install
+
+COPY . .
 RUN yarn build
 
 # ---- Production Stage ----
-FROM node:20-alpine
+FROM node:23-alpine
 WORKDIR /app
 
-COPY --from=builder /app/build ./build
 RUN yarn global add serve
 
-# Create non-root user
+COPY --from=builder /app/build ./build
+
+# Security: non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
