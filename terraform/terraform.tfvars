@@ -30,7 +30,7 @@ memory_size         = "3072"
 service_name        = "main-service"
 desired_count       = 1
 container_name      = "my-container"
-container_port      = 3000
+container_port      = 80
 container_image_url = "816069169238.dkr.ecr.eu-west-2.amazonaws.com/ecs-project:latest"
 
 # Certificate / DNS
