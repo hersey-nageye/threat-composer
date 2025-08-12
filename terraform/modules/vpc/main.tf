@@ -57,3 +57,13 @@ resource "aws_route_table_association" "public-rta" {
   route_table_id = aws_route_table.public_rt.id
 }
 
+# VPC Flow Logs
+resource "aws_cloudwatch_log_group" "vpc_logs" {
+  name = "/vpc/${aws_vpc.main.id}"
+}
+resource "aws_flow_log" "vpc" {
+  vpc_id               = aws_vpc.main.id
+  log_destination_type = "cloud-watch-logs"
+  log_destination      = aws_cloudwatch_log_group.vpc_logs.arn
+  traffic_type         = "ALL"
+}
