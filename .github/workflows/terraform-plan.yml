@@ -58,8 +58,9 @@ jobs:
       run: |
         checkov -d . --framework terraform \
           --output cli \
-          --output junitxml --output-file-path console,checkov-report.xml \
-          --output sarif --output-file-path console,checkov.sarif        
+          --output junitxml \
+          --output sarif \
+          --output-file-path console,checkov-report.xml,checkov.sarif        
       continue-on-error: true  
       
     - name: Upload Checkov SARIF to code scanning
