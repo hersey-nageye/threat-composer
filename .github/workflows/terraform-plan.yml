@@ -10,12 +10,12 @@ on:
     branches: [ main ]
     paths: 
       - 'terraform/**' 
-      - '.github/workflows/terraform-scan.yml'
+      - '.github/workflows/terraform-plan.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'terraform/**'
-      - '.github/workflows/terraform-scan.yml'
+      - '.github/workflows/terraform-plan.yml'
 
 env:
   AWS_REGION: eu-west-2  
