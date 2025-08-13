@@ -17,6 +17,7 @@ resource "aws_vpc_security_group_ingress_rule" "container_port" {
   security_group_id = aws_security_group.ecs_tasks_sg.id
 
   referenced_security_group_id = var.alb_sg_id
+  description                  = "Allow traffic from ALB to ECS tasks"
   from_port                    = 80
   ip_protocol                  = "tcp"
   to_port                      = 80
@@ -24,6 +25,7 @@ resource "aws_vpc_security_group_ingress_rule" "container_port" {
 
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4_ecs" {
   security_group_id = aws_security_group.ecs_tasks_sg.id
+  description       = "Allow all outbound traffic from ECS tasks"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"
 }
